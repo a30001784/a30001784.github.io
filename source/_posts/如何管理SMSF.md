@@ -2,6 +2,7 @@
 title: 如何管理SMSF?
 date: 2023-10-29 10:26:21
 tags:
+type: SMSF
 ---
 
 ## 什么是SMSF管理？
