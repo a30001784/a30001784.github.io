@@ -2,6 +2,8 @@
 title: 什么是SMSF?
 date: 2023-10-28 19:31:12
 tags:
+categories: 
+- SMSF
 ---
 
 ### 自我管理养老基金（SMSF）是您自己管理的私人养老基金。 SMSF 与工业和零售养老基金不同。

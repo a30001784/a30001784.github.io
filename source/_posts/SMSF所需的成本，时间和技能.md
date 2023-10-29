@@ -2,7 +2,8 @@
 title: SMSF所需的成本，时间和技能
 date: 2023-10-28 19:56:30
 tags:
-type: SMSF
+categories: 
+- SMSF
 ---
 
 您需要有时间和技能来管理您的自我管理超级基金，并且存在持续的运营成本。
