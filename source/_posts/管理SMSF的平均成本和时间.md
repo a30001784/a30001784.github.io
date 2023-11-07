@@ -3,7 +3,7 @@ layout: blog
 title: 管理SMSF的平均成本和时间
 date: 2023-11-07 21:19:03
 tags: 
-- SMSF_Admin
+- Admin
 categories: 
 - SMSF
 ---
