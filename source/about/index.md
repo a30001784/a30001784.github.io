@@ -8,6 +8,3 @@ type: "about"
 
 
 Predawn Super - a trusted SMSF since 2021
-
-ABN Status:	Active from 05 Sep 2021
-Fund type:	ATO Regulated Self-Managed Superannuation Fund
