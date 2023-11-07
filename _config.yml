@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: SMSF Observer
+title: SMSF见闻
 subtitle: ''
 description: 'A site on the latest SMSF info'
 keywords:
 author: Predawn Super
-language: en
+language: cn
 timezone: ''
 
 # URL
