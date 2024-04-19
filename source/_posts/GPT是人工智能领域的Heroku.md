@@ -1,7 +1,7 @@
 ---
 title: GPT是人工智能领域的Heroku
 date: 2024-04-19 22:36:57
-tags: 
+tags: ChatGPT
 categories: 
 - AI
 ---
