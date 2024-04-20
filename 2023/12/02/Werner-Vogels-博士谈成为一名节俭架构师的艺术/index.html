@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"a30001784.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在本博客中，我将分享 Werner Vogels 博士于 2023 年 11 月 30 日在 AWS re:Invent 2023 上的主题演讲中分享的有趣见解。让我带您了解所有见解。 节俭架构师的 3 支柱：  设计 衡量 优化  让我们详细了解节俭架构师的三大支柱。 成本为 NFR（非功能需求）成本是可持续性的密切代表。大多数时候，在构建产品时忽视的是成本。虽然非功能性需求定义了系统如何运行，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Werner Vogels 博士谈成为一名节俭架构师的艺术">
+<meta property="og:url" content="http://a30001784.github.io/2023/12/02/Werner-Vogels-%E5%8D%9A%E5%A3%AB%E8%B0%88%E6%88%90%E4%B8%BA%E4%B8%80%E5%90%8D%E8%8A%82%E4%BF%AD%E6%9E%B6%E6%9E%84%E5%B8%88%E7%9A%84%E8%89%BA%E6%9C%AF/index.html">
+<meta property="og:site_name" content="SMSF Observer">
+<meta property="og:description" content="在本博客中，我将分享 Werner Vogels 博士于 2023 年 11 月 30 日在 AWS re:Invent 2023 上的主题演讲中分享的有趣见解。让我带您了解所有见解。 节俭架构师的 3 支柱：  设计 衡量 优化  让我们详细了解节俭架构师的三大支柱。 成本为 NFR（非功能需求）成本是可持续性的密切代表。大多数时候，在构建产品时忽视的是成本。虽然非功能性需求定义了系统如何运行，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-02T03:46:56.000Z">
+<meta property="article:modified_time" content="2023-12-02T04:03:18.727Z">
+<meta property="article:author" content="Predawn Super">
+<meta property="article:tag" content="AWS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://a30001784.github.io/2023/12/02/Werner-Vogels-%E5%8D%9A%E5%A3%AB%E8%B0%88%E6%88%90%E4%B8%BA%E4%B8%80%E5%90%8D%E8%8A%82%E4%BF%AD%E6%9E%B6%E6%9E%84%E5%B8%88%E7%9A%84%E8%89%BA%E6%9C%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Werner Vogels 博士谈成为一名节俭架构师的艺术 | SMSF Observer</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SMSF Observer</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://a30001784.github.io/2023/12/02/Werner-Vogels-%E5%8D%9A%E5%A3%AB%E8%B0%88%E6%88%90%E4%B8%BA%E4%B8%80%E5%90%8D%E8%8A%82%E4%BF%AD%E6%9E%B6%E6%9E%84%E5%B8%88%E7%9A%84%E8%89%BA%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Predawn Super">
+      <meta itemprop="description" content="A site on the latest SMSF info">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SMSF Observer">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Werner Vogels 博士谈成为一名节俭架构师的艺术
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-12-02 14:46:56 / 修改时间：15:03:18" itemprop="dateCreated datePublished" datetime="2023-12-02T14:46:56+11:00">2023-12-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TECH/" itemprop="url" rel="index"><span itemprop="name">TECH</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在本博客中，我将分享 Werner Vogels 博士于 2023 年 11 月 30 日在 AWS re:Invent 2023 上的主题演讲中分享的有趣见解。让我带您了解所有见解。</p>
+<p>节俭架构师的 3 支柱：</p>
+<ul>
+<li>设计</li>
+<li>衡量</li>
+<li>优化</li>
+</ul>
+<p>让我们详细了解节俭架构师的三大支柱。</p>
+<h2 id="成本为-NFR（非功能需求）"><a href="#成本为-NFR（非功能需求）" class="headerlink" title="成本为 NFR（非功能需求）"></a>成本为 NFR（非功能需求）</h2><p>成本是可持续性的密切代表。大多数时候，在构建产品时忽视的是成本。虽然非功能性需求定义了系统如何运行，包括可访问性、可用性、可扩展性、安全性、可移植性、可维护性和合规性等方面，但在此过程中成本常常被忽视。成本是设计解决方案时需要考虑的重要因素。</p>
+<p>通过尽早并持续地考虑成本影响，系统可以设计为平衡功能、上市时间和效率。</p>
+<h2 id="最终使成本与业务保持一致的系统"><a href="#最终使成本与业务保持一致的系统" class="headerlink" title="最终使成本与业务保持一致的系统"></a>最终使成本与业务保持一致的系统</h2><p>任何耐用的系统都取决于其成本与业务模式的匹配程度。已经携手并进。任何技术决策都必须考虑业务方面。</p>
+<blockquote>
+<p>“找到你要赚钱的维度，然后确保架构跟随金钱。”- 成本意识，架构2012</p>
+</blockquote>
+<h2 id="架构设计是一系列的权衡"><a href="#架构设计是一系列的权衡" class="headerlink" title="架构设计是一系列的权衡"></a>架构设计是一系列的权衡</h2><p>在构建解决方案或基础设施时调整您的优先级。实现真正有效的云架构需要在业务和技术要求之间取得微妙的平衡，并与您的风险偏好和预算限制保持一致。节俭不仅仅意味着削减成本，还意味着节俭。这是关于优化价值。为了实现这一目标，必须确定您真正愿意为特定的特性和功能付费。</p>
+<p>在建造中，你采取的每一步都需要权衡。</p>
+<blockquote>
+<p>每个工程决策都是购买决策</p>
+</blockquote>
+<h2 id="未观察到的系统会导致未知的成本"><a href="#未观察到的系统会导致未知的成本" class="headerlink" title="未观察到的系统会导致未知的成本"></a>未观察到的系统会导致未知的成本</h2><p>他讲述了一个来自阿姆斯特丹的富有洞察力的故事。有两座结构相似的建造物。但其中一个的功耗增加，另一个的功耗减少。为什么这样 ？</p>
+<p>答案如下图所示。仔细看图像。其中一栋楼的电表安装在地下室，另一栋楼的电表安装在前门一侧，因此耗电较多。你由此得到什么？</p>
+<p>观察或分析得越多，就能节省越多。地下室是我们偶尔去的地方，所以观察次数比你进入房子时走廊仪表观察的次数要少。这一观察结果强调了仔细观察和分析在识别隐藏的低效率和优化机会方面的重要性。正如频繁监控走廊中的仪表可以改善能源消耗一样，定期审查我们的架构决策和资源使用情况可以节省成本并提高性能。我们观察和分析越多，我们就越能完善我们的基础设施并提供更好的结果</p>
+<h2 id="成本感知架构实施成本控制"><a href="#成本感知架构实施成本控制" class="headerlink" title="成本感知架构实施成本控制"></a>成本感知架构实施成本控制</h2><p>定义层级，如 tier1、tier2…tierN。我的系统的哪些部分需要启动并运行。将您的应用程序分解为小块，并按重要性对它们进行分类。</p>
+<p>成本优化必须是可衡量的，并与业务影响挂钩。</p>
+<h2 id="成本优化是渐进式的"><a href="#成本优化是渐进式的" class="headerlink" title="成本优化是渐进式的"></a>成本优化是渐进式的</h2><p>确保您的系统具有成本效益是一个持续的过程。这不是你做过一次然后就忘记的事情。您需要不断检查您的系统以找到提高其效率的方法</p>
+<p>简而言之，想象你有一个花园。当你第一次种植种子时，你需要经常给它们浇水。一旦植物长大，你就不需要经常浇水了。但您仍然需要时不时地检查它们，以确保它们健康并且没有喝太多或太少的水。</p>
+<p>这与您的云系统相同。您需要确保它们从一开始就设置正确，但您还需要不断检查它们以确保它们没有使用超出所需的资源。</p>
+<blockquote>
+<p>如果我们继续寻找，总会有改进的空间。我们今天获得的节省为明天的创新提供了资金。</p>
+</blockquote>
+<p>毫无挑战的成功导致假设</p>
+<blockquote>
+<p>“英语中最危险的短语是：‘我们一直都是这样做的……’”——海军少将格蕾丝·霍珀</p>
+</blockquote>
+<p>说得对。对方法、工具或编程语言过度自信的倾向是危险的。不要认为你今天构建的任何东西永远都是最好的。消除那些假设。开放做实验。走出你的怀疑。Werner博士给出了很好的例子，例如“我们是一家 Java 商店”或“我们擅长 Rails”等。这是危险的假设。让我们避免这些并构建得更好。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><blockquote>
+<p>“现在，去建造吧”</p>
+</blockquote>
+<p>我使用的一些单词或句子是Werner博士写作或谈论它们的方式，以保持与他想向观众传达的内容相同的方式。我希望你喜欢这些见解。如果您有任何反馈或意见，请随时在评论部分提出。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>还没有人赞赏，支持一下!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Predawn Super 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Predawn Super 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AWS/" rel="tag"># AWS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/07/%E7%AE%A1%E7%90%86SMSF%E7%9A%84%E5%B9%B3%E5%9D%87%E6%88%90%E6%9C%AC%E5%92%8C%E6%97%B6%E9%97%B4/" rel="prev" title="管理SMSF的平均成本和时间">
+      <i class="fa fa-chevron-left"></i> 管理SMSF的平均成本和时间
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/04/19/GPT%E6%98%AF%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E9%A2%86%E5%9F%9F%E7%9A%84Heroku/" rel="next" title="GPT是人工智能领域的Heroku">
+      GPT是人工智能领域的Heroku <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E4%B8%BA-NFR%EF%BC%88%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">成本为 NFR（非功能需求）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E4%BD%BF%E6%88%90%E6%9C%AC%E4%B8%8E%E4%B8%9A%E5%8A%A1%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E7%9A%84%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">最终使成本与业务保持一致的系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E6%98%AF%E4%B8%80%E7%B3%BB%E5%88%97%E7%9A%84%E6%9D%83%E8%A1%A1"><span class="nav-number">3.</span> <span class="nav-text">架构设计是一系列的权衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E8%A7%82%E5%AF%9F%E5%88%B0%E7%9A%84%E7%B3%BB%E7%BB%9F%E4%BC%9A%E5%AF%BC%E8%87%B4%E6%9C%AA%E7%9F%A5%E7%9A%84%E6%88%90%E6%9C%AC"><span class="nav-number">4.</span> <span class="nav-text">未观察到的系统会导致未知的成本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E6%84%9F%E7%9F%A5%E6%9E%B6%E6%9E%84%E5%AE%9E%E6%96%BD%E6%88%90%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">5.</span> <span class="nav-text">成本感知架构实施成本控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E4%BC%98%E5%8C%96%E6%98%AF%E6%B8%90%E8%BF%9B%E5%BC%8F%E7%9A%84"><span class="nav-number">6.</span> <span class="nav-text">成本优化是渐进式的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Predawn Super</p>
+  <div class="site-description" itemprop="description">A site on the latest SMSF info</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Predawn Super</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
